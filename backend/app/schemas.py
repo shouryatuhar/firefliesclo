@@ -39,6 +39,12 @@ class SpeakerCreate(SpeakerBase):
     pass
 
 
+class SpeakerUpdate(BaseModel):
+    name: Optional[str] = None
+    email: Optional[str] = None
+    avatar_url: Optional[str] = None
+
+
 class SpeakerResponse(SpeakerBase):
     id: int
     meeting_id: int
@@ -171,6 +177,8 @@ class MeetingCreate(MeetingBase):
 class MeetingUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
+    date_recorded: Optional[datetime] = None
+    thumbnail_url: Optional[str] = None
 
 
 class MeetingDetailResponse(MeetingBase):

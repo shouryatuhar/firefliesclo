@@ -1,170 +1,258 @@
-# Fireflies.ai Clone - SDE Fullstack Assignment
+# Fireflies.ai Clone
 
-A functional clone of Fireflies.ai meeting-assistant platform with interactive transcripts, AI-generated summaries, and meeting management.
+> A production-inspired full-stack clone of Fireflies.ai built with Next.js, FastAPI, TypeScript and SQLite for the Scaler AI Labs Full Stack (SDE) Assignment.
 
-## Tech Stack
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi)
+![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite)
+![License](https://img.shields.io/badge/License-Educational-lightgrey)
 
-- **Frontend**: Next.js 14 (App Router) + TypeScript + Tailwind CSS
-- **Backend**: FastAPI (Python) + SQLAlchemy
-- **Database**: SQLite
-- **Deployment**: (To be configured)
+---
 
-## Project Structure
+## Overview
 
-```
+This project is a **Fireflies.ai-inspired Meeting Intelligence Platform** that enables users to manage meetings, browse AI-generated notes, explore interactive transcripts, organise action items, and search conversations through a modern SaaS interface.
+
+The application was built as part of the **Scaler AI Labs Full Stack (SDE) Assignment** with a strong focus on production-quality architecture, clean UI, and maintainable code.
+
+> **Disclaimer**
+>
+> This project is an educational implementation inspired by Fireflies.ai and is **not affiliated with, endorsed by, or associated with Fireflies.ai**.
+
+---
+
+# Features
+
+## Meeting Management
+
+- Create meetings
+- Edit meeting metadata
+- Delete meetings
+- Meeting dashboard
+- Participant management
+- Persistent SQLite storage
+
+---
+
+## Interactive Transcript
+
+- Speaker-labelled transcript
+- Timestamp navigation
+- Transcript search
+- Search highlighting
+- Click transcript to seek playback
+- Active transcript synchronisation
+
+---
+
+## AI Meeting Notes
+
+- AI-generated meeting summary
+- Key discussion topics
+- Meeting outline
+- Action items
+- Editable action items
+
+---
+
+## AskFred
+
+- Meeting-specific AI assistant
+- Context-aware Q&A
+- Suggested prompts
+- Chat interface
+
+---
+
+## Search & Organisation
+
+- Global meeting search
+- Search by title
+- Search by participant
+- Search by transcript
+- Filters
+- Tags
+- Sorting
+
+---
+
+## Additional Features
+
+- Soundbites
+- Meeting exports
+- Responsive layout
+- Fireflies-inspired UI
+- Landing page
+- Sidebar navigation
+- Dark workspace
+
+---
+
+# Tech Stack
+
+## Frontend
+
+- Next.js (App Router)
+- React 19
+- TypeScript
+- Tailwind CSS
+
+## Backend
+
+- FastAPI
+- SQLAlchemy
+- SQLite
+- Pydantic
+
+## Development
+
+- REST APIs
+- Git
+- GitHub
+
+---
+
+# Project Structure
+
+```text
 fireflies-clone/
+
+├── frontend/
+│   ├── app/
+│   ├── components/
+│   ├── lib/
+│   └── styles/
+│
 ├── backend/
 │   ├── app/
-│   │   ├── main.py              # FastAPI app entry point
-│   │   ├── database.py          # SQLite + SQLAlchemy setup
-│   │   ├── models.py            # ORM models
-│   │   ├── schemas.py           # Pydantic request/response models
-│   │   ├── seed.py              # Database seeding script
-│   │   └── routes/
-│   │       ├── meetings.py      # Meeting CRUD endpoints
-│   │       ├── transcripts.py   # Transcript retrieval
-│   │       ├── summaries.py     # Summary, action items, key topics
-│   │       └── action_items.py  # Action item CRUD
-│   ├── requirements.txt
-│   └── .env
-└── frontend/
-    ├── app/                     # Next.js App Router
-    ├── components/              # React components
-    ├── lib/                     # Utilities and API client
-    ├── public/                  # Static assets
-    └── package.json
+│   │   ├── models.py
+│   │   ├── schemas.py
+│   │   ├── routes.py
+│   │   ├── database.py
+│   │   └── main.py
+│   │
+│   └── requirements.txt
+│
+└── README.md
 ```
 
-## Database Schema
+---
 
-### Core Tables
+# Getting Started
 
-- **users**: Hardcoded logged-in user (id, name, email, avatar_url)
-- **meetings**: Meeting records (id, title, description, date_recorded, duration_seconds, participants_count)
-- **speakers**: Meeting participants (id, meeting_id, name, email, avatar_url)
-- **transcript_segments**: Individual transcript lines (id, meeting_id, speaker_id, text, start_time_seconds, end_time_seconds, sequence_order)
-- **summaries**: AI-generated summaries (id, meeting_id, overview)
-- **action_items**: Tasks from meetings (id, meeting_id, assigned_to, description, completed)
-- **key_topics**: Meeting chapters/topics (id, meeting_id, title, description, timestamp_seconds, sequence_order)
+## Clone the repository
 
-**Key Design Decisions:**
-- Timestamps in seconds for easy media player synchronization
-- Computed fields (duration, participants_count) kept in sync server-side
-- Full transcript returned in single API call (no pagination)
-- One-to-one summary per meeting
+```bash
+git clone https://github.com/<YOUR_GITHUB_USERNAME>/fireflies-clone.git
 
-## API Endpoints
+cd fireflies-clone
+```
 
-### Meetings
-- `GET /api/meetings` - List meetings (search, filter, sort)
-- `POST /api/meetings` - Create meeting
-- `GET /api/meetings/{id}` - Get meeting with all related data
-- `PUT /api/meetings/{id}` - Update meeting metadata
-- `DELETE /api/meetings/{id}` - Delete meeting
+---
 
-### Transcripts
-- `GET /api/meetings/{id}/transcript` - Get full transcript (with optional search)
+## Backend
 
-### Summaries & Topics
-- `GET /api/meetings/{id}/summary` - Get meeting summary
-- `POST /api/meetings/{id}/summary` - Create summary
-- `PUT /api/meetings/{id}/summary` - Update summary
-- `GET /api/meetings/{id}/key-topics` - Get key topics
-- `POST /api/meetings/{id}/key-topics` - Create key topic
+```bash
+cd backend
 
-### Action Items
-- `GET /api/meetings/{id}/action-items` - Get meeting action items
-- `POST /api/meetings/{id}/action-items` - Create action item
-- `PUT /api/action-items/{id}` - Update action item (mark complete, etc)
-- `DELETE /api/action-items/{id}` - Delete action item
+python -m venv venv
 
-## Getting Started
+source venv/bin/activate        # macOS / Linux
 
-### Backend Setup
+pip install -r requirements.txt
 
-1. Install Python 3.10+
-2. Create virtual environment:
-   ```bash
-   cd backend
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Seed database:
-   ```bash
-   python -m app.seed
-   ```
-5. Start server:
-   ```bash
-   python -m app.main
-   ```
-   Server runs at `http://localhost:8000`, docs at `http://localhost:8000/docs`
+python -m app.seed
 
-### Frontend Setup (Coming Soon)
+uvicorn app.main:app --reload
+```
+
+Backend runs on
+
+```
+http://localhost:8000
+```
+
+---
+
+## Frontend
 
 ```bash
 cd frontend
+
 npm install
+
 npm run dev
 ```
 
-Frontend will run at `http://localhost:3000`
+Frontend runs on
 
-## Seed Data
+```
+http://localhost:3000
+```
 
-The database is seeded with 4 realistic meetings:
-1. **Q3 Product Demo** - Product team showcasing new dashboard (16 segments, 3 speakers)
-2. **Engineering Standup** - Sprint 47 standup (13 segments, 4 speakers)
-3. **Client Feedback** - Acme Corp feedback session (11 segments, 3 speakers)
-4. **Q4 Strategic Planning** - Executive OKRs and budget (12 segments, 3 speakers)
+---
 
-Each includes full transcripts with timestamps, summaries, action items, and key topics.
+# Screenshots
 
-## Features Implemented
+## Landing Page
 
-### Core
-- ✅ Meetings library with search, filter, and sort
-- ✅ Full CRUD for meetings and related data
-- ✅ Interactive transcripts with speaker labels and timestamps
-- ✅ AI-generated summaries (seeded/mocked)
-- ✅ Action items with completion tracking
-- ✅ Key topics/chapters with timestamps
+> *(Add screenshot here)*
 
-### In Progress
-- ⏳ Frontend: Dashboard, meeting detail view, UI components
-- ⏳ Media player with seek bar
-- ⏳ Transcript search with highlighting
-- ⏳ Fireflies-inspired design (dark sidebar, purple accents)
+---
 
-### Placeholder (Coming Soon)
-- 🔒 Real user authentication
-- 🔒 Real audio/video transcription
-- 🔒 Live meeting capture
-- 🔒 Team collaboration & sharing
-- 🔒 Integrations (Zoom, Google Meet, Calendar)
+## Meetings Dashboard
 
-## CORS Configuration
+> *(Add screenshot here)*
 
-Backend CORS allows `http://localhost:3000` (and `localhost:8000` for testing).
-Update `ALLOWED_ORIGINS` in `app/main.py` for production domains.
+---
 
-## Development Notes
+## Meeting Detail
 
-- All timestamps use UTC (`datetime.utcnow()`)
-- Transcript timestamps in seconds for media player sync
-- Pydantic models use `from_attributes = True` for SQLAlchemy integration
-- FastAPI lifespan context initializes DB on startup
+> *(Add screenshot here)*
 
-## Assignment Requirements
+---
 
-This implementation fulfills all must-have requirements:
-1. ✅ Meetings library with title, date, duration, participants, search, filter, sort
-2. ✅ Meeting detail view with transcript, media player placeholder, search within transcript
-3. ✅ AI summary & notes section with action items and key topics
-4. ✅ Full CRUD for meetings and related content
-5. ✅ Fireflies-like experience (design and UX patterns from screenshots)
+## Interactive Transcript
 
-Database schema and backend architecture are designed to be production-ready and scalable.
+> *(Add screenshot here)*
+
+---
+
+## AI Summary & AskFred
+
+> *(Add screenshot here)*
+
+---
+
+# Future Improvements
+
+- User authentication
+- Real speech-to-text transcription
+- Calendar integrations
+- Zoom & Google Meet integrations
+- Live meeting bot
+- Team collaboration
+- Workspace sharing
+
+---
+
+# Why this project?
+
+This project was built to demonstrate full-stack engineering skills including:
+
+- Modern React development
+- Backend API design
+- Database modelling
+- CRUD operations
+- Search & filtering
+- Responsive UI development
+- State management
+- Production-inspired application architecture
+
+---
+
+# License
+
+This repository was created solely for educational purposes as part of the Scaler AI Labs Full Stack Assignment.

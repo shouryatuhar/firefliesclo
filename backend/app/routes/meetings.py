@@ -5,7 +5,7 @@ FastAPI routes for meeting CRUD operations.
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from typing import Optional, List
 
 from app.database import get_db
@@ -18,6 +18,8 @@ from app.schemas import (
     MeetingFullResponse,
     MeetingFullCreate,
     SpeakerCreate,
+    SpeakerResponse,
+    SpeakerUpdate,
     SummaryCreate,
     TranscriptSegmentCreate,
     ActionItemCreate,
@@ -45,27 +47,62 @@ def _compute_duration_and_participants(db: Session, meeting: Meeting):
     db.commit()
 
 
+def _get_meeting_or_404(db: Session, meeting_id: int) -> Meeting:
+    meeting = db.query(Meeting).filter(Meeting.id == meeting_id).first()
+    if not meeting:
+        raise HTTPException(status_code=404, detail="Meeting not found")
+    return meeting
+
+
 @router.get("", response_model=List[MeetingListResponse])
 def list_meetings(
     db: Session = Depends(get_db),
     skip: int = 0,
     limit: int = 50,
     search: Optional[str] = None,
+    participant: Optional[str] = None,
+    date_from: Optional[str] = None,
+    date_to: Optional[str] = None,
     sort_by: str = "recent"
 ):
     """
     List all meetings. Supports pagination, search, and sorting.
     
-    - search: Filter by title or description
+    - search: Filter by title, description, speaker, or recorded date text
+    - participant: Filter by speaker name/email
+    - date_from/date_to: Inclusive YYYY-MM-DD date range
     - sort_by: "recent" (newest first) or "oldest" (oldest first)
     """
     query = db.query(Meeting)
     
     if search:
+        query = query.outerjoin(Speaker)
         query = query.filter(
             (Meeting.title.ilike(f"%{search}%")) |
-            (Meeting.description.ilike(f"%{search}%"))
-        )
+            (Meeting.description.ilike(f"%{search}%")) |
+            (Speaker.name.ilike(f"%{search}%")) |
+            (Speaker.email.ilike(f"%{search}%"))
+        ).distinct()
+    
+    if participant:
+        query = query.join(Speaker).filter(
+            (Speaker.name.ilike(f"%{participant}%")) |
+            (Speaker.email.ilike(f"%{participant}%"))
+        ).distinct()
+    
+    if date_from:
+        try:
+            start = datetime.combine(datetime.fromisoformat(date_from).date(), time.min)
+            query = query.filter(Meeting.date_recorded >= start)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="date_from must be YYYY-MM-DD")
+    
+    if date_to:
+        try:
+            end = datetime.combine(datetime.fromisoformat(date_to).date(), time.max)
+            query = query.filter(Meeting.date_recorded <= end)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="date_to must be YYYY-MM-DD")
     
     if sort_by == "oldest":
         query = query.order_by(Meeting.date_recorded.asc())
@@ -81,19 +118,50 @@ def list_meetings(
     return meetings
 
 
-@router.get("/{meeting_id}", response_model=MeetingDetailResponse)
-def get_meeting(meeting_id: int, db: Session = Depends(get_db)):
+@router.get("/global-search")
+def global_search(q: str, db: Session = Depends(get_db), limit: int = 20):
     """
-    Get a meeting with all related data: speakers, transcript, summary, action items, key topics.
+    Search across meeting metadata, participants, and transcript text.
     """
-    meeting = db.query(Meeting).filter(Meeting.id == meeting_id).first()
-    if not meeting:
-        raise HTTPException(status_code=404, detail="Meeting not found")
+    term = q.strip()
+    if not term:
+        return {"meetings": [], "transcript_matches": []}
     
-    # Ensure computed fields are up-to-date
-    _compute_duration_and_participants(db, meeting)
+    meeting_rows = db.query(Meeting).outerjoin(Speaker).filter(
+        (Meeting.title.ilike(f"%{term}%")) |
+        (Meeting.description.ilike(f"%{term}%")) |
+        (Speaker.name.ilike(f"%{term}%")) |
+        (Speaker.email.ilike(f"%{term}%"))
+    ).distinct().order_by(Meeting.date_recorded.desc()).limit(limit).all()
     
-    return meeting
+    transcript_rows = db.query(TranscriptSegment).join(Meeting).join(Speaker).filter(
+        TranscriptSegment.text.ilike(f"%{term}%")
+    ).order_by(Meeting.date_recorded.desc(), TranscriptSegment.sequence_order.asc()).limit(limit).all()
+    
+    return {
+        "meetings": [
+            {
+                "id": meeting.id,
+                "title": meeting.title,
+                "description": meeting.description,
+                "date_recorded": meeting.date_recorded,
+                "duration_seconds": meeting.duration_seconds,
+                "participants_count": meeting.participants_count,
+            }
+            for meeting in meeting_rows
+        ],
+        "transcript_matches": [
+            {
+                "meeting_id": segment.meeting_id,
+                "meeting_title": segment.meeting.title,
+                "segment_id": segment.id,
+                "speaker": segment.speaker.name,
+                "text": segment.text,
+                "start_time_seconds": segment.start_time_seconds,
+            }
+            for segment in transcript_rows
+        ],
+    }
 
 
 @router.post("", response_model=MeetingFullResponse, status_code=201)
@@ -117,31 +185,6 @@ def create_meeting(
     db.refresh(meeting)
     
     _compute_duration_and_participants(db, meeting)
-    return meeting
-
-
-@router.put("/{meeting_id}", response_model=MeetingDetailResponse)
-def update_meeting(
-    meeting_id: int,
-    meeting_update: MeetingUpdate,
-    db: Session = Depends(get_db)
-):
-    """
-    Update meeting metadata (title, description).
-    """
-    meeting = db.query(Meeting).filter(Meeting.id == meeting_id).first()
-    if not meeting:
-        raise HTTPException(status_code=404, detail="Meeting not found")
-    
-    if meeting_update.title is not None:
-        meeting.title = meeting_update.title
-    if meeting_update.description is not None:
-        meeting.description = meeting_update.description
-    
-    meeting.updated_at = datetime.utcnow()
-    db.commit()
-    db.refresh(meeting)
-    
     return meeting
 
 
@@ -251,6 +294,122 @@ def create_meeting_full(
         if isinstance(e, HTTPException):
             raise
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/{meeting_id}", response_model=MeetingDetailResponse)
+def get_meeting(meeting_id: int, db: Session = Depends(get_db)):
+    """
+    Get a meeting with all related data: speakers, transcript, summary, action items, key topics.
+    """
+    meeting = db.query(Meeting).filter(Meeting.id == meeting_id).first()
+    if not meeting:
+        raise HTTPException(status_code=404, detail="Meeting not found")
+    
+    # Ensure computed fields are up-to-date
+    _compute_duration_and_participants(db, meeting)
+    
+    return meeting
+
+
+@router.put("/{meeting_id}", response_model=MeetingDetailResponse)
+def update_meeting(
+    meeting_id: int,
+    meeting_update: MeetingUpdate,
+    db: Session = Depends(get_db)
+):
+    """
+    Update meeting metadata (title, description, date, thumbnail).
+    """
+    meeting = db.query(Meeting).filter(Meeting.id == meeting_id).first()
+    if not meeting:
+        raise HTTPException(status_code=404, detail="Meeting not found")
+    
+    update_fields = meeting_update.model_fields_set
+    if "title" in update_fields:
+        meeting.title = meeting_update.title
+    if "description" in update_fields:
+        meeting.description = meeting_update.description
+    if "date_recorded" in update_fields:
+        meeting.date_recorded = meeting_update.date_recorded
+    if "thumbnail_url" in update_fields:
+        meeting.thumbnail_url = meeting_update.thumbnail_url
+    
+    meeting.updated_at = datetime.utcnow()
+    db.commit()
+    db.refresh(meeting)
+    
+    return meeting
+
+
+@router.post("/{meeting_id}/speakers", response_model=SpeakerResponse, status_code=201)
+def create_speaker(meeting_id: int, speaker_create: SpeakerCreate, db: Session = Depends(get_db)):
+    meeting = db.query(Meeting).filter(Meeting.id == meeting_id).first()
+    if not meeting:
+        raise HTTPException(status_code=404, detail="Meeting not found")
+    
+    speaker = Speaker(
+        meeting_id=meeting_id,
+        name=speaker_create.name,
+        email=speaker_create.email,
+        avatar_url=speaker_create.avatar_url,
+    )
+    db.add(speaker)
+    db.commit()
+    db.refresh(speaker)
+    _compute_duration_and_participants(db, meeting)
+    return speaker
+
+
+@router.put("/{meeting_id}/speakers/{speaker_id}", response_model=SpeakerResponse)
+def update_speaker(
+    meeting_id: int,
+    speaker_id: int,
+    speaker_update: SpeakerUpdate,
+    db: Session = Depends(get_db)
+):
+    speaker = db.query(Speaker).filter(
+        Speaker.id == speaker_id,
+        Speaker.meeting_id == meeting_id,
+    ).first()
+    if not speaker:
+        raise HTTPException(status_code=404, detail="Speaker not found")
+    
+    update_fields = speaker_update.model_fields_set
+    if "name" in update_fields:
+        speaker.name = speaker_update.name
+    if "email" in update_fields:
+        speaker.email = speaker_update.email
+    if "avatar_url" in update_fields:
+        speaker.avatar_url = speaker_update.avatar_url
+    
+    db.commit()
+    db.refresh(speaker)
+    return speaker
+
+
+@router.delete("/{meeting_id}/speakers/{speaker_id}", status_code=204)
+def delete_speaker(meeting_id: int, speaker_id: int, db: Session = Depends(get_db)):
+    meeting = db.query(Meeting).filter(Meeting.id == meeting_id).first()
+    if not meeting:
+        raise HTTPException(status_code=404, detail="Meeting not found")
+    
+    speaker = db.query(Speaker).filter(
+        Speaker.id == speaker_id,
+        Speaker.meeting_id == meeting_id,
+    ).first()
+    if not speaker:
+        raise HTTPException(status_code=404, detail="Speaker not found")
+    
+    segments_count = db.query(TranscriptSegment).filter(
+        TranscriptSegment.speaker_id == speaker_id
+    ).count()
+    if segments_count:
+        raise HTTPException(status_code=409, detail="Cannot delete a speaker who has transcript segments")
+    
+    db.delete(speaker)
+    db.commit()
+    _compute_duration_and_participants(db, meeting)
+    return None
 
 
 @router.delete("/{meeting_id}", status_code=204)

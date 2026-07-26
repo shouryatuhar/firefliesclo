@@ -145,11 +145,13 @@ def update_action_item(
     if not item:
         raise HTTPException(status_code=404, detail="Action item not found")
     
-    if action_item_update.description is not None:
+    update_fields = action_item_update.model_fields_set
+    
+    if "description" in update_fields:
         item.description = action_item_update.description
-    if action_item_update.assigned_to is not None:
+    if "assigned_to" in update_fields:
         item.assigned_to = action_item_update.assigned_to
-    if action_item_update.completed is not None:
+    if "completed" in update_fields:
         item.completed = action_item_update.completed
     
     item.updated_at = datetime.utcnow()

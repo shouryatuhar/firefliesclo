@@ -73,6 +73,11 @@ def list_meetings(
         query = query.order_by(Meeting.date_recorded.desc())
     
     meetings = query.offset(skip).limit(limit).all()
+    
+    # Compute duration_seconds and participants_count for each meeting
+    for meeting in meetings:
+        _compute_duration_and_participants(db, meeting)
+    
     return meetings
 
 

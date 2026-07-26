@@ -106,19 +106,6 @@ def get_meeting_action_items(meeting_id: int, db: Session = Depends(get_db)):
     return items
 
 
-@router.post("/api/action-items", response_model=ActionItemResponse, status_code=201)
-def create_action_item(
-    action_item_create: ActionItemCreate,
-    db: Session = Depends(get_db)
-):
-    """
-    Create a new action item. meeting_id must be in the request body.
-    """
-    # Note: The create schema should have meeting_id. For now, we assume it's passed.
-    # If not in schema, modify this endpoint to accept it as a path param or form data.
-    raise HTTPException(status_code=400, detail="meeting_id required in request body")
-
-
 @router.post("/api/meetings/{meeting_id}/action-items", response_model=ActionItemResponse, status_code=201)
 def create_action_item_for_meeting(
     meeting_id: int,

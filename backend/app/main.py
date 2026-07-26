@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from app.database import init_db
-from app.routes import meetings, transcripts, summaries, action_items
+from app.routes import meetings, transcripts, summaries
 
 # Lifespan context for startup/shutdown tasks
 @asynccontextmanager
@@ -54,7 +54,6 @@ app.add_middleware(
 app.include_router(meetings.router)
 app.include_router(transcripts.router)
 app.include_router(summaries.router)
-app.include_router(action_items.router)
 
 
 @app.get("/")

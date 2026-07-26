@@ -203,5 +203,59 @@ class MeetingListResponse(MeetingBase):
 # FULL MEETING DATA (for POST create, returns full meeting with nested data)
 # ============================================================================
 
+# ============================================================================
+# FULL MEETING CREATE SCHEMA (nested, for bulk create endpoint)
+# ============================================================================
+
+class SpeakerCreateNested(BaseModel):
+    """Speaker info nested in MeetingFullCreate."""
+    name: str
+    email: Optional[str] = None
+    avatar_url: Optional[str] = None
+
+
+class TranscriptSegmentCreateNested(BaseModel):
+    """Transcript segment nested in MeetingFullCreate."""
+    speaker_name: str  # References a speaker by name from the speakers list
+    text: str
+    start_time_seconds: float
+    end_time_seconds: float
+    sequence_order: Optional[int] = None
+
+
+class ActionItemCreateNested(BaseModel):
+    """Action item nested in MeetingFullCreate."""
+    description: str
+    assigned_to: Optional[str] = None
+    completed: bool = False
+
+
+class KeyTopicCreateNested(BaseModel):
+    """Key topic nested in MeetingFullCreate."""
+    title: str
+    description: Optional[str] = None
+    timestamp_seconds: Optional[float] = None
+    sequence_order: Optional[int] = None
+
+
+class MeetingFullCreate(BaseModel):
+    """
+    Complete meeting creation request with nested speakers, transcript, summary, etc.
+    Creates entire meeting + related data in a single transaction.
+    """
+    # Meeting fields
+    title: str
+    description: Optional[str] = None
+    date_recorded: datetime
+    thumbnail_url: Optional[str] = None
+    
+    # Related data
+    speakers: List[SpeakerCreateNested]
+    transcript_segments: List[TranscriptSegmentCreateNested]
+    summary: Optional[SummaryCreate] = None
+    action_items: Optional[List[ActionItemCreateNested]] = None
+    key_topics: Optional[List[KeyTopicCreateNested]] = None
+
+
 class MeetingFullResponse(MeetingDetailResponse):
     pass

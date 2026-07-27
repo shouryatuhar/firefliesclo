@@ -18,6 +18,11 @@ def seed_database():
     init_db()
     
     db = SessionLocal()
+    # If demo meetings already exist, don't seed again.
+if db.query(Meeting).count() > 0:
+    print("✅ Demo data already exists. Skipping seed.")
+    db.close()
+    return
     
     # Create default user (appears in navbar)
     existing_user = db.query(User).filter(User.email == "user@example.com").first()

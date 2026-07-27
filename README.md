@@ -11,11 +11,27 @@
 
 ---
 
-## Overview
+# Live Demo
 
-This project is a **Fireflies.ai-inspired Meeting Intelligence Platform** that enables users to manage meetings, browse AI-generated notes, explore interactive transcripts, organise action items, and search conversations through a modern SaaS interface.
+### Frontend
+https://firefliesclo.vercel.app
 
-The application was built as part of the **Scaler AI Labs Full Stack (SDE) Assignment** with a strong focus on production-quality architecture, clean UI, and maintainable code.
+### Backend API
+https://firefliesclo-production.up.railway.app
+
+### Swagger Documentation
+https://firefliesclo-production.up.railway.app/docs
+
+### GitHub Repository
+https://github.com/shouryatuhar/firefliesclo
+
+---
+
+# Overview
+
+Fireflies.ai Clone is a modern AI Meeting Intelligence Platform inspired by Fireflies.ai. It enables users to manage meetings, browse AI-generated summaries, search transcripts, organise action items and interact with meeting data through a clean production-style interface.
+
+The project was developed as part of the **Scaler AI Labs Full Stack (SDE) Assignment**, focusing on scalable architecture, clean UI, REST APIs and production deployment.
 
 > **Disclaimer**
 >
@@ -28,11 +44,11 @@ The application was built as part of the **Scaler AI Labs Full Stack (SDE) Assig
 ## Meeting Management
 
 - Create meetings
-- Edit meeting metadata
+- Edit meetings
 - Delete meetings
-- Meeting dashboard
+- Dashboard with meeting cards
 - Participant management
-- Persistent SQLite storage
+- Persistent SQLite database
 
 ---
 
@@ -47,46 +63,35 @@ The application was built as part of the **Scaler AI Labs Full Stack (SDE) Assig
 
 ---
 
-## AI Meeting Notes
+## AI Notes
 
-- AI-generated meeting summary
+- Meeting summaries
 - Key discussion topics
-- Meeting outline
 - Action items
 - Editable action items
 
 ---
 
-## AskFred
+## Search & Filtering
 
-- Meeting-specific AI assistant
-- Context-aware Q&A
-- Suggested prompts
-- Chat interface
-
----
-
-## Search & Organisation
-
-- Global meeting search
-- Search by title
-- Search by participant
-- Search by transcript
-- Filters
-- Tags
-- Sorting
+- Global search
+- Search by meeting title
+- Search transcript text
+- Filter by participant
+- Filter by date
+- Sort meetings
 
 ---
 
 ## Additional Features
 
-- Soundbites
-- Meeting exports
-- Responsive layout
 - Fireflies-inspired UI
+- Responsive design
 - Landing page
-- Sidebar navigation
-- Dark workspace
+- Sidebar workspace
+- Dark theme
+- REST API
+- Swagger documentation
 
 ---
 
@@ -94,7 +99,7 @@ The application was built as part of the **Scaler AI Labs Full Stack (SDE) Assig
 
 ## Frontend
 
-- Next.js (App Router)
+- Next.js 16
 - React 19
 - TypeScript
 - Tailwind CSS
@@ -106,34 +111,28 @@ The application was built as part of the **Scaler AI Labs Full Stack (SDE) Assig
 - SQLite
 - Pydantic
 
-## Development
+## Deployment
 
-- REST APIs
-- Git
-- GitHub
+- Vercel
+- Railway
 
 ---
 
 # Project Structure
 
 ```text
-fireflies-clone/
-
-├── frontend/
-│   ├── app/
-│   ├── components/
-│   ├── lib/
-│   └── styles/
+firefliesclo/
 │
 ├── backend/
-│   ├── app/
-│   │   ├── models.py
-│   │   ├── schemas.py
-│   │   ├── routes.py
-│   │   ├── database.py
-│   │   └── main.py
-│   │
-│   └── requirements.txt
+│
+├── frontend/
+│
+├── README-assets/
+│   ├── landing-page.png
+│   ├── meetings-dashboard.png
+│   ├── meeting-transcript.png
+│   ├── swagger-api.png
+│   └── lighthouse-score.png
 │
 └── README.md
 ```
@@ -142,12 +141,12 @@ fireflies-clone/
 
 # Getting Started
 
-## Clone the repository
+## Clone Repository
 
 ```bash
-git clone https://github.com/<YOUR_GITHUB_USERNAME>/fireflies-clone.git
+git clone https://github.com/shouryatuhar/firefliesclo.git
 
-cd fireflies-clone
+cd firefliesclo
 ```
 
 ---
@@ -159,7 +158,7 @@ cd backend
 
 python -m venv venv
 
-source venv/bin/activate        # macOS / Linux
+source venv/bin/activate
 
 pip install -r requirements.txt
 
@@ -198,58 +197,74 @@ http://localhost:3000
 
 ## Landing Page
 
-> *(Add screenshot here)*
+![Landing Page](README-assets/Screenshot%202026-07-27%20at%2010.48.13.png)
+
+A modern Fireflies-inspired landing page introducing the AI meeting workspace.
 
 ---
 
 ## Meetings Dashboard
 
-> *(Add screenshot here)*
+![Meetings Dashboard](README-assets/Screenshot%202026-07-27%20at%2010.47.48.png)
+
+Browse meetings, search transcripts, filter participants, and create new meetings from a unified dashboard.
 
 ---
 
-## Meeting Detail
+## Interactive Transcript & Playback
 
-> *(Add screenshot here)*
+![Meeting Transcript](README-assets/Screenshot%202026-07-27%20at%2010.42.15.png)
 
----
-
-## Interactive Transcript
-
-> *(Add screenshot here)*
+Timestamp-synchronised transcript with playback controls, transcript search, AI summary, and editable action items.
 
 ---
 
-## AI Summary & AskFred
+## REST API Documentation
 
-> *(Add screenshot here)*
+![Swagger API](README-assets/Screenshot%202026-07-27%20at%2010.41.57.png)
+
+Interactive OpenAPI (Swagger) documentation exposing all backend REST endpoints.
 
 ---
 
+## Lighthouse Performance
+
+| Metric | Score |
+|--------|------:|
+| Performance | **99** |
+| Accessibility | **94** |
+| Best Practices | **100** |
+| SEO | **100** |
+
+![Lighthouse Report](README-assets/Screenshot%202026-07-27%20at%2010.41.44.png)
+---
 # Future Improvements
 
-- User authentication
+- Authentication
 - Real speech-to-text transcription
-- Calendar integrations
-- Zoom & Google Meet integrations
 - Live meeting bot
+- Google Meet integration
+- Zoom integration
 - Team collaboration
 - Workspace sharing
+- Cloud storage
 
 ---
 
 # Why this project?
 
-This project was built to demonstrate full-stack engineering skills including:
+This project demonstrates production-oriented full-stack engineering skills including:
 
 - Modern React development
-- Backend API design
-- Database modelling
+- Next.js App Router
+- FastAPI REST APIs
+- SQL database modelling
 - CRUD operations
 - Search & filtering
 - Responsive UI development
-- State management
-- Production-inspired application architecture
+- Production deployment
+- API documentation
+- Performance optimisation
 
 ---
 

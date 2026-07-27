@@ -1,8 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { MeetingListItem } from '../lib/api';
-import { formatDate, formatDuration, highlightMatch } from '../lib/utils';
-
+import { MeetingListItem } from '@/lib/api';
+import { formatDate, formatDuration, highlightMatch } from '@/lib/utils';
 export default function MeetingCard({
   meeting,
   searchQuery = '',

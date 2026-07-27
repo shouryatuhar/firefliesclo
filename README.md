@@ -199,7 +199,7 @@ http://localhost:3000
 
 ![Landing Page](README-assets/Screenshot%202026-07-27%20at%2010.48.13.png)
 
-A modern Fireflies-inspired landing page introducing the AI meeting workspace.
+Production-style landing page showcasing the Fireflies.ai-inspired meeting workspace.
 
 ---
 
@@ -207,27 +207,27 @@ A modern Fireflies-inspired landing page introducing the AI meeting workspace.
 
 ![Meetings Dashboard](README-assets/Screenshot%202026-07-27%20at%2010.47.48.png)
 
-Browse meetings, search transcripts, filter participants, and create new meetings from a unified dashboard.
+Browse meetings, search transcripts, filter participants, create new meetings and manage your workspace.
 
 ---
 
-## Interactive Transcript & Playback
+## Interactive Transcript
 
-![Meeting Transcript](README-assets/Screenshot%202026-07-27%20at%2010.42.15.png)
+![Interactive Transcript](README-assets/Screenshot%202026-07-27%20at%2010.42.15.png)
 
-Timestamp-synchronised transcript with playback controls, transcript search, AI summary, and editable action items.
-
----
-
-## REST API Documentation
-
-![Swagger API](README-assets/Screenshot%202026-07-27%20at%2010.41.57.png)
-
-Interactive OpenAPI (Swagger) documentation exposing all backend REST endpoints.
+Interactive transcript with playback synchronization, timestamp navigation, transcript search, AI summary and action items.
 
 ---
 
-## Lighthouse Performance
+## Backend REST API (Swagger)
+
+![Swagger Documentation](README-assets/Screenshot%202026-07-27%20at%2010.41.57.png)
+
+Complete OpenAPI documentation exposing every REST endpoint used by the application.
+
+---
+
+## Lighthouse Performance Report
 
 | Metric | Score |
 |--------|------:|

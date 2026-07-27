@@ -15,6 +15,8 @@ from app.routes import meetings, transcripts, summaries
 async def lifespan(app: FastAPI):
     # Startup: initialize database
     init_db()
+    from app.seed import seed_database
+seed_database()
     print("✅ Database initialized")
     yield
     # Shutdown: cleanup if needed

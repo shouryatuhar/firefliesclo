@@ -13,13 +13,17 @@ from app.routes import meetings, transcripts, summaries
 # Lifespan context for startup/shutdown tasks
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: initialize database
+    # Startup
     init_db()
+
     from app.seed import seed_database
-seed_database()
+    seed_database()
+
     print("✅ Database initialized")
+
     yield
-    # Shutdown: cleanup if needed
+
+    # Shutdown
     pass
 
 

@@ -197,37 +197,37 @@ http://localhost:3000
 
 ## Landing Page
 
-![Landing Page](README-assets/Screenshot%202026-07-27%20at%2010.48.13.png)
+![Landing Page](README-assets/Screenshot%202026-07-27%20at%2010.41.44.png)
 
-Production-style landing page showcasing the Fireflies.ai-inspired meeting workspace.
+Production-inspired landing page showcasing the Fireflies.ai clone.
 
 ---
 
 ## Meetings Dashboard
 
-![Meetings Dashboard](README-assets/Screenshot%202026-07-27%20at%2010.47.48.png)
+![Meetings Dashboard](README-assets/Screenshot%202026-07-27%20at%2010.41.57.png)
 
-Browse meetings, search transcripts, filter participants, create new meetings and manage your workspace.
+Browse meetings, create new meetings, search conversations, filter participants, and manage your workspace.
 
 ---
 
-## Interactive Transcript
+## Interactive Transcript & Playback
 
 ![Interactive Transcript](README-assets/Screenshot%202026-07-27%20at%2010.42.15.png)
 
-Interactive transcript with playback synchronization, timestamp navigation, transcript search, AI summary and action items.
+Timestamp-synchronised transcript with playback controls, transcript search, and AI meeting notes.
 
 ---
 
-## Backend REST API (Swagger)
+## REST API Documentation
 
-![Swagger Documentation](README-assets/Screenshot%202026-07-27%20at%2010.41.57.png)
+![Swagger API](README-assets/Screenshot%202026-07-27%20at%2010.47.48.png)
 
-Complete OpenAPI documentation exposing every REST endpoint used by the application.
+OpenAPI (Swagger UI) documenting all backend REST endpoints.
 
 ---
 
-## Lighthouse Performance Report
+## Lighthouse Performance
 
 | Metric | Score |
 |--------|------:|
@@ -236,7 +236,7 @@ Complete OpenAPI documentation exposing every REST endpoint used by the applicat
 | Best Practices | **100** |
 | SEO | **100** |
 
-![Lighthouse Report](README-assets/Screenshot%202026-07-27%20at%2010.41.44.png)
+![Lighthouse Report](README-assets/Screenshot%202026-07-27%20at%2010.48.13.png)
 ---
 # Future Improvements
 

@@ -14,29 +14,31 @@ def seed_database():
     """
     Initialize database and populate with sample data.
     """
-    init_db()
 
-    db = SessionLocal()
+
+        db = SessionLocal()
 
     # Don't seed twice
-    if db.query(Meeting).count() > 0:
+    existing_user = (
+        db.query(User)
+        .filter(User.email == "user@example.com")
+        .first()
+    )
+
+    if existing_user:
         print("✅ Demo data already exists. Skipping seed.")
         db.close()
         return
 
-    # Create default user...
-    
-    # Create default user (appears in navbar)
-    existing_user = db.query(User).filter(User.email == "user@example.com").first()
-    if not existing_user:
-        default_user = User(
-            name="Alex Johnson",
-            email="user@example.com",
-            avatar_url="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex"
-        )
-        db.add(default_user)
-        db.commit()
-    
+    # Create default demo user
+    default_user = User(
+        name="Alex Johnson",
+        email="user@example.com",
+        avatar_url="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex"
+    )
+
+    db.add(default_user)
+    db.commit()
     # =========================================================================
     # MEETING 1: Product Demo - New Dashboard Features
     # =========================================================================

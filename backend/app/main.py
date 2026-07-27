@@ -37,6 +37,8 @@ ALLOWED_ORIGINS = [
     "https://localhost:3000",
     "http://localhost:8000",      # For testing
     "http://127.0.0.1:8000",
+    "https://firefliesclo.vercel.app",
+    "https://firefliesclo-hqi3b5lnt-shouryatuhars-projects.vercel.app",
     # Add your production domains here
     # "https://yourdomain.com",
 ]

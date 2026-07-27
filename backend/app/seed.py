@@ -15,8 +15,7 @@ def seed_database():
     Initialize database and populate with sample data.
     """
 
-
-        db = SessionLocal()
+    db = SessionLocal()
 
     # Don't seed twice
     existing_user = (

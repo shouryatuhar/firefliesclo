@@ -1,13 +1,33 @@
 'use client';
-
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import api, { ActionItem, MeetingDetail, TranscriptSegment } from '../../../../lib/api';
-import { formatClock, formatDateTime, formatDuration, fromDatetimeLocalValue, highlightMatch, initials, toDatetimeLocalValue } from '../../../../lib/utils';
-import { useToast } from '../../../../components/Toast';
-import { loadMeetingFeatures, makeLocalId, MeetingLocalFeatures, saveMeetingFeatures, TranscriptMarker } from '../../../../lib/localFeatures';
 
+import api, {
+  ActionItem,
+  MeetingDetail,
+  TranscriptSegment,
+} from '@/lib/api';
+
+import {
+  formatClock,
+  formatDateTime,
+  formatDuration,
+  fromDatetimeLocalValue,
+  highlightMatch,
+  initials,
+  toDatetimeLocalValue,
+} from '@/lib/utils';
+
+import { useToast } from '@/components/Toast';
+
+import {
+  loadMeetingFeatures,
+  makeLocalId,
+  MeetingLocalFeatures,
+  saveMeetingFeatures,
+  TranscriptMarker,
+} from '@/lib/localFeatures';
 type ItemDraft = {
   description: string;
   assigned_to: string;

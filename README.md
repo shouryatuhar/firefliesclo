@@ -197,7 +197,7 @@ http://localhost:3000
 
 ## Landing Page
 
-![Landing Page](README-assets/Screenshot%202026-07-27%20at%2010.41.44.png)
+![Landing Page](./README-assets/Screenshot%202026-07-27%20at%2010.41.44.png)
 
 Production-inspired landing page showcasing the Fireflies.ai clone.
 
@@ -205,7 +205,7 @@ Production-inspired landing page showcasing the Fireflies.ai clone.
 
 ## Meetings Dashboard
 
-![Meetings Dashboard](README-assets/Screenshot%202026-07-27%20at%2010.41.57.png)
+![Meetings Dashboard](./README-assets/Screenshot%202026-07-27%20at%2010.41.57.png)
 
 Browse meetings, create new meetings, search conversations, filter participants, and manage your workspace.
 
@@ -213,7 +213,7 @@ Browse meetings, create new meetings, search conversations, filter participants,
 
 ## Interactive Transcript & Playback
 
-![Interactive Transcript](README-assets/Screenshot%202026-07-27%20at%2010.42.15.png)
+![Interactive Transcript](./README-assets/Screenshot%202026-07-27%20at%2010.42.15.png)
 
 Timestamp-synchronised transcript with playback controls, transcript search, and AI meeting notes.
 
@@ -221,7 +221,7 @@ Timestamp-synchronised transcript with playback controls, transcript search, and
 
 ## REST API Documentation
 
-![Swagger API](README-assets/Screenshot%202026-07-27%20at%2010.47.48.png)
+![Swagger API](./README-assets/Screenshot%202026-07-27%20at%2010.47.48.png)
 
 OpenAPI (Swagger UI) documenting all backend REST endpoints.
 
@@ -230,13 +230,13 @@ OpenAPI (Swagger UI) documenting all backend REST endpoints.
 ## Lighthouse Performance
 
 | Metric | Score |
-|--------|------:|
+|---------|------:|
 | Performance | **99** |
 | Accessibility | **94** |
 | Best Practices | **100** |
 | SEO | **100** |
 
-![Lighthouse Report](README-assets/Screenshot%202026-07-27%20at%2010.48.13.png)
+![Lighthouse Report](./README-assets/Screenshot%202026-07-27%20at%2010.48.13.png)
 ---
 # Future Improvements
 

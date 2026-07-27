@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Navbar from '../../../components/Navbar';
 import MeetingList from '../../../components/MeetingList';
 import { GlobalSearchResult, MeetingFullPayload, MeetingListItem } from '../../../lib/api';
-import api from '../../../lib/api';
+import api from '@/lib/api';
 import { useToast } from '../../../components/Toast';
 import { fromDatetimeLocalValue, splitLines, toDatetimeLocalValue } from '../../../lib/utils';
 import { loadMeetingFeatures } from '../../../lib/localFeatures';
